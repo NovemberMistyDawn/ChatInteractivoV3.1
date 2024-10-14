@@ -19,58 +19,100 @@ const messagesRef = db.collection('mensajes');
 let userId = null;
 let userName = null;
 let currentUser = null;
+let invitationCode;
 let validCodes = {}; // Almacena códigos de invitación válidos
 const users = []; // Almacena los usuarios conectados
 
+
+
+
+function generateAndShowInvitationCode() {
+    invitationCode = generateInvitationCode(); // Almacena el código generado
+    document.getElementById('invitationCode').textContent = invitationCode;
+}
+
 // Función para generar un código de invitación aleatorio
 function generateInvitationCode() {
-    return Math.random().toString(36).substr(2, 8);
+    return Math.random().toString(36).substr(2, 8); // Genera un código aleatorio
 }
+
 // Evento para unirse al chat
 document.getElementById('joinChat').addEventListener('click', () => {
     userName = document.getElementById('username').value.trim();
-    const userType = document.querySelector('input[name="userType"]:checked').value; // Obtener tipo de usuario seleccionado
+    const userType = document.querySelector('input[name="userType"]:checked').value;
 
     if (userName) {
-        usersRef.add({
-            name: userName,
-            joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then((docRef) => {
-            userId = docRef.id;
-            document.getElementById('welcome').style.display = 'none';
-            document.getElementById('chat').style.display = 'block';
-            loadMessages(); // Cargar los mensajes al unirse al chat
-
-            // Si es un usuario principal, generar y mostrar el código de invitación
-            if (userType === 'main') {
-                currentUser = userName;
-                const invitationCode = generateInvitationCode();
-                validCodes[currentUser] = invitationCode;
-
-                // Mostrar el código de invitación
-                document.getElementById('invitationCode').textContent = invitationCode;
-                document.getElementById('invitationCodeContainer').style.display = 'block'; // Cambiar a visible
-                
-                // Agregar el usuario a la lista de usuarios conectados
-                if (!users.includes(currentUser)) {
-                    users.push(currentUser);
-                }
-                updateUserList(); // Asegúrate de tener esta función definida
-            }
-        }).catch((error) => {
-            console.error("Error al guardar el usuario: ", error);
-        });
+        if (userType === 'guest') {
+            // Mostrar la ventana modal para ingresar el código de invitación
+            document.getElementById('invitationModal').style.display = 'block';
+        } else {
+            handleMainUserJoin(); // Llama a la función que maneja la unión del usuario principal
+        }
     } else {
         alert('Por favor, ingresa un nombre.');
     }
 });
 
-// Función para generar un código de invitación aleatorio
+// Manejar unión del usuario principal
+function handleMainUserJoin() {
+    usersRef.add({
+        name: userName,
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then((docRef) => {
+        userId = docRef.id; // Guardar el ID del usuario
+        document.getElementById('welcome').style.display = 'none'; // Ocultar la sección de bienvenida
+        document.getElementById('chat').style.display = 'block'; // Mostrar el chat
+        loadMessages(); // Cargar los mensajes al unirse al chat
 
+        // Agregar el usuario a la lista de usuarios conectados
+        if (!users.includes(userName)) {
+            users.push(userName);
+        }
+        updateUserList(); // Asegúrate de tener esta función definida
+    }).catch((error) => {
+        console.error("Error al guardar el usuario: ", error);
+    });
+}
+
+window.onload = generateAndShowInvitationCode;
+
+// Evento para confirmar el código de invitación
+document.getElementById('confirmCode').addEventListener('click', () => {
+    const accessCode = document.getElementById('accessCode').value.trim();
+
+    // Aquí se asegura que el código ingresado sea igual al generado
+    if (accessCode === invitationCode) { 
+        // Si el código es válido, unirse al chat como invitado
+        handleGuestUserJoin();
+    } else {
+        alert('Código de invitación inválido. Inténtalo de nuevo.');
+    }
+});
+
+// Manejar unión del usuario invitado
+function handleGuestUserJoin() {
+    usersRef.add({
+        name: userName,
+        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then((docRef) => {
+        userId = docRef.id; // Guardar el ID del usuario
+        document.getElementById('invitationModal').style.display = 'none'; // Cerrar el modal
+        document.getElementById('welcome').style.display = 'none'; // Ocultar sección de bienvenida
+        document.getElementById('chat').style.display = 'block'; // Mostrar chat
+        loadMessages(); // Cargar los mensajes al unirse al chat
+    }).catch((error) => {
+        console.error("Error al guardar el usuario: ", error);
+    });
+}
+
+// Evento para cancelar el ingreso del código
+document.getElementById('cancelCode').addEventListener('click', () => {
+    document.getElementById('invitationModal').style.display = 'none'; // Cerrar el modal
+});
 
 // Manejar el evento de clic en el botón de copiar código
 document.getElementById('copyCode').addEventListener('click', function() {
-    navigator.clipboard.writeText(validCodes[currentUser]).then(() => {
+    navigator.clipboard.writeText(invitationCode).then(() => {
         alert('Código copiado al portapapeles!');
     }).catch((error) => {
         console.error('Error al copiar el código: ', error);
@@ -80,6 +122,10 @@ document.getElementById('copyCode').addEventListener('click', function() {
 // Eventos para enviar mensajes y subir imágenes
 document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
 document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+
+
+
+
 
 // Función para cargar los mensajes en tiempo real
 function loadMessages() {

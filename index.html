@@ -19,44 +19,44 @@
         <h1>Bienvenido al Chat</h1>
         <label for="username">Nombre de Usuario:</label>
         <input type="text" id="username" placeholder="Ingresa tu nombre">
-    
+
         <div>
-            <input type="radio" id="mainUser" name="userType" value="main">
+            <input type="radio" id="mainUser" name="userType" value="main" checked>
             <label for="mainUser">Usuario Principal</label>
             <input type="radio" id="guestUser" name="userType" value="guest">
             <label for="guestUser">Invitado</label>
         </div>
-    
-        <div id="invitationCodeInput" style="display:none;">
-            <label for="accessCode">Código de Invitación:</label>
-            <input type="text" id="accessCode" placeholder="Ingresa el código">
-        </div>
-    
-        <button id="joinChat">Unirse al Chat</button>
-    </div>
-    
-    <div id="chat" style="display: none;">
-        <h2>Chat Público</h2>
-    
-        <div id="invitationCodeContainer" style="display: none;">
+
+        <!-- Mostrar el código de invitación aquí -->
+        <div id="invitationCodeContainer" >
             <strong>Código de Invitación:</strong> <span id="invitationCode" style="font-weight: bold;"></span>
             <button id="copyCode">Copiar Código</button>
         </div>
-    
+
+        <label for="accessCode" id="accessCodeLabel" style="display:none;">Código de Invitación:</label>
+        <input type="text" id="accessCode" placeholder="Ingresa el código" style="display:none;">
+
+        <button id="joinChat">Unirse al Chat</button>
+    </div>
+
+    <div id="chat" style="display: none;">
+        <h2>Chat Público</h2>
         <div id="messages" class="messages">
             <!-- Los mensajes se añadirán aquí dinámicamente -->
         </div>
-    
         <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
         <button id="sendMessageButton">Enviar</button>
         <button onclick="document.getElementById('imageInput').click();">Subir Imagen</button>
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
     </div>
-    <div id="privateChatContainer"></div>
 
-   
-
-
+    <div id="invitationModal" style="display:none;">
+        <h2>Ingresar Código de Invitación</h2>
+        <label for="accessCode">Código de Invitación:</label>
+        <input type="text" id="accessCode" placeholder="Ingresa el código">
+        <button id="confirmCode">Confirmar Código</button>
+        <button id="cancelCode">Cancelar</button>
+    </div>
 
 
 
