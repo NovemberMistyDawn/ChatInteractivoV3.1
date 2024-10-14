@@ -109,3 +109,65 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+
+.privateChatAccess {
+  display: block;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(245, 239, 239, 0.712); /* Fondo semitransparente */
+  z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #faf6ff;
+  border-radius: 20px;
+}
+
+.privateChatAccess h2{
+color:white;
+}
+/* Pseudoelemento antes */
+.privateChatAccess:before,
+.privateChatAccess:after {
+  content: "";
+  position: absolute;
+  top: 0; /* Cambiado para que cubra completamente */
+  left: 0; /* Cambiado para que cubra completamente */
+  background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000);
+  background-size: 400% 400%;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  z-index: -1; /* Debajo del contenido */
+  animation: animate 10s ease alternate infinite;
+}
+
+/* Pseudoelemento después */
+.privateChatAccess:after {
+  filter: blur(20px); /* Añade un desenfoque al borde */
+  z-index: -2; /* Asegúrate de que esté detrás del primero */
+}
+
+/* Animación para el borde */
+@keyframes animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 400px;
+  margin: auto;
+}

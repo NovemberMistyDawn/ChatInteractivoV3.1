@@ -63,6 +63,7 @@ function handleMainUserJoin() {
         document.getElementById('welcome').style.display = 'none'; // Ocultar la sección de bienvenida
         document.getElementById('chat').style.display = 'block'; // Mostrar el chat
         loadMessages(); // Cargar los mensajes al unirse al chat
+        generateAndShowInvitationCode(); // Generar y mostrar el código de invitación
 
         // Agregar el usuario a la lista de usuarios conectados
         if (!users.includes(userName)) {
@@ -74,6 +75,18 @@ function handleMainUserJoin() {
     });
 }
 
+// Evento para confirmar el código de invitación
+document.getElementById('confirmCode').addEventListener('click', () => {
+    const accessCode = document.getElementById('accessCode').value.trim();
+
+    // Aquí se asegura que el código ingresado sea igual al generado
+    if (accessCode === invitationCode) { 
+        // Si el código es válido, unirse al chat como invitado
+        handleGuestUserJoin();
+    } else {
+        alert('Código de invitación inválido. Inténtalo de nuevo.');
+    }
+});
 window.onload = generateAndShowInvitationCode;
 
 // Evento para confirmar el código de invitación
@@ -100,30 +113,44 @@ function handleGuestUserJoin() {
         document.getElementById('welcome').style.display = 'none'; // Ocultar sección de bienvenida
         document.getElementById('chat').style.display = 'block'; // Mostrar chat
         loadMessages(); // Cargar los mensajes al unirse al chat
+        generateAndShowInvitationCode(); // Generar y mostrar el código de invitación
     }).catch((error) => {
         console.error("Error al guardar el usuario: ", error);
     });
 }
 
-// Evento para cancelar el ingreso del código
-document.getElementById('cancelCode').addEventListener('click', () => {
-    document.getElementById('invitationModal').style.display = 'none'; // Cerrar el modal
-});
 
-// Manejar el evento de clic en el botón de copiar código
-document.getElementById('copyCode').addEventListener('click', function() {
-    navigator.clipboard.writeText(invitationCode).then(() => {
-        alert('Código copiado al portapapeles!');
-    }).catch((error) => {
-        console.error('Error al copiar el código: ', error);
-    });
-});
+// Evento para entrar en el chat privado
+
+
 
 // Eventos para enviar mensajes y subir imágenes
 document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
 document.getElementById('imageInput').addEventListener('change', handleImageUpload);
 
+// Evento para entrar en el chat privado
+document.getElementById('enterPrivateChatButton').addEventListener('click', () => {
+    document.getElementById('privateChatModal').style.display = 'block'; // Mostrar el modal para ingresar el código
+});
 
+// Evento para confirmar el código de invitación del chat privado
+document.getElementById('confirmPrivateCode').addEventListener('click', () => {
+    const privateAccessCode = document.getElementById('privateAccessCode').value.trim();
+    
+    // Verifica si el código ingresado es igual al generado
+    if (privateAccessCode === invitationCode) { 
+        alert('¡Bienvenido al Chat Privado!'); // Mensaje de bienvenida
+        // Aquí puedes implementar la lógica para redirigir al chat privado o cargar mensajes
+        document.getElementById('privateChatModal').style.display = 'none'; // Cerrar el modal
+    } else {
+        alert('Código de invitación inválido. Inténtalo de nuevo.'); // Mensaje de error
+    }
+});
+
+// Evento para cancelar el ingreso del código en el modal
+document.getElementById('cancelPrivateCode').addEventListener('click', () => {
+    document.getElementById('privateChatModal').style.display = 'none'; // Cerrar el modal
+});
 
 
 

@@ -28,10 +28,7 @@
         </div>
 
         <!-- Mostrar el código de invitación aquí -->
-        <div id="invitationCodeContainer" >
-            <strong>Código de Invitación:</strong> <span id="invitationCode" style="font-weight: bold;"></span>
-            <button id="copyCode">Copiar Código</button>
-        </div>
+        
 
         <label for="accessCode" id="accessCodeLabel" style="display:none;">Código de Invitación:</label>
         <input type="text" id="accessCode" placeholder="Ingresa el código" style="display:none;">
@@ -39,8 +36,16 @@
         <button id="joinChat">Unirse al Chat</button>
     </div>
 
+
     <div id="chat" style="display: none;">
         <h2>Chat Público</h2>
+        <div id="invitationCodeContainer">
+            <strong>Código de Invitación:</strong> <span id="invitationCode" style="font-weight: bold;"></span>
+            <button id="copyCode">Copiar Código</button>
+        </div>
+
+        <button id="enterPrivateChatButton">Entrar en el Chat Privado</button> <!-- Botón para entrar en el chat privado -->
+
         <div id="messages" class="messages">
             <!-- Los mensajes se añadirán aquí dinámicamente -->
         </div>
@@ -50,15 +55,15 @@
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
     </div>
 
-    <div id="invitationModal" style="display:none;">
-        <h2>Ingresar Código de Invitación</h2>
-        <label for="accessCode">Código de Invitación:</label>
-        <input type="text" id="accessCode" placeholder="Ingresa el código">
-        <button id="confirmCode">Confirmar Código</button>
-        <button id="cancelCode">Cancelar</button>
+
+
+    <div id="privateChatModal" class="privateChatAccess" style="display:block;">
+        <h2>Ingresar Código de Invitación para el Chat Privado</h2>
+        <label for="privateAccessCode">Código de Invitación:</label>
+        <input type="text" id="privateAccessCode" placeholder="Ingresa el código">
+        <button id="confirmPrivateCode">Confirmar Código</button>
+        <button id="cancelPrivateCode">Cancelar</button>
     </div>
-
-
 
 
 <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
