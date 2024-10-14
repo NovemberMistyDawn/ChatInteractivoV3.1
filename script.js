@@ -18,10 +18,19 @@ const messagesRef = db.collection('mensajes');
 
 let userId = null;
 let userName = null;
+let currentUser = null;
+let validCodes = {}; // Almacena códigos de invitación válidos
+const users = []; // Almacena los usuarios conectados
 
+// Función para generar un código de invitación aleatorio
+function generateInvitationCode() {
+    return Math.random().toString(36).substr(2, 8);
+}
 // Evento para unirse al chat
 document.getElementById('joinChat').addEventListener('click', () => {
     userName = document.getElementById('username').value.trim();
+    const userType = document.querySelector('input[name="userType"]:checked').value; // Obtener tipo de usuario seleccionado
+
     if (userName) {
         usersRef.add({
             name: userName,
@@ -31,12 +40,41 @@ document.getElementById('joinChat').addEventListener('click', () => {
             document.getElementById('welcome').style.display = 'none';
             document.getElementById('chat').style.display = 'block';
             loadMessages(); // Cargar los mensajes al unirse al chat
+
+            // Si es un usuario principal, generar y mostrar el código de invitación
+            if (userType === 'main') {
+                currentUser = userName;
+                const invitationCode = generateInvitationCode();
+                validCodes[currentUser] = invitationCode;
+
+                // Mostrar el código de invitación
+                document.getElementById('invitationCode').textContent = invitationCode;
+                document.getElementById('invitationCodeContainer').style.display = 'block'; // Cambiar a visible
+                
+                // Agregar el usuario a la lista de usuarios conectados
+                if (!users.includes(currentUser)) {
+                    users.push(currentUser);
+                }
+                updateUserList(); // Asegúrate de tener esta función definida
+            }
         }).catch((error) => {
             console.error("Error al guardar el usuario: ", error);
         });
     } else {
         alert('Por favor, ingresa un nombre.');
     }
+});
+
+// Función para generar un código de invitación aleatorio
+
+
+// Manejar el evento de clic en el botón de copiar código
+document.getElementById('copyCode').addEventListener('click', function() {
+    navigator.clipboard.writeText(validCodes[currentUser]).then(() => {
+        alert('Código copiado al portapapeles!');
+    }).catch((error) => {
+        console.error('Error al copiar el código: ', error);
+    });
 });
 
 // Eventos para enviar mensajes y subir imágenes

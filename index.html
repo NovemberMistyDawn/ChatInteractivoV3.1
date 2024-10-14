@@ -15,12 +15,11 @@
 </head>
 
 <body>
-
     <div id="welcome">
         <h1>Bienvenido al Chat</h1>
         <label for="username">Nombre de Usuario:</label>
         <input type="text" id="username" placeholder="Ingresa tu nombre">
-        
+    
         <div>
             <input type="radio" id="mainUser" name="userType" value="main">
             <label for="mainUser">Usuario Principal</label>
@@ -38,7 +37,8 @@
     
     <div id="chat" style="display: none;">
         <h2>Chat Público</h2>
-        <div id="invitationCodeContainer">
+    
+        <div id="invitationCodeContainer" style="display: none;">
             <strong>Código de Invitación:</strong> <span id="invitationCode" style="font-weight: bold;"></span>
             <button id="copyCode">Copiar Código</button>
         </div>
@@ -46,14 +46,14 @@
         <div id="messages" class="messages">
             <!-- Los mensajes se añadirán aquí dinámicamente -->
         </div>
-        
+    
         <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
         <button id="sendMessageButton">Enviar</button>
         <button onclick="document.getElementById('imageInput').click();">Subir Imagen</button>
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
     </div>
     <div id="privateChatContainer"></div>
-    
+
    
 
 
