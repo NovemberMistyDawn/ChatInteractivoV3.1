@@ -1,0 +1,111 @@
+@font-face {
+  font-family: "MadeInfinity";
+  src: url("font/made_infinity/MADEINFINITYPersonalUse-Regular.otf");
+}
+
+/* Aplica la fuente a todo el documento */
+* {
+  font-family: "MadeInfinity";
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+#welcome {
+  text-align: center;
+  margin: 50px auto;
+  max-width: 400px;
+}
+
+#chat {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.message {
+  display: inline-block;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 20px;
+  word-wrap: break-word;
+  max-width: 70%;
+  position: relative;
+}
+
+/* Estilo para los mensajes enviados */
+.message.sent {
+  color: white;
+  background-color: #ffb6c1;
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+  background: linear-gradient(to right, #d80e6c, #a54aa5);
+}
+
+.message.sent::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent transparent #d80e6c;
+}
+
+/* Estilo para los mensajes recibidos */
+.message.received {
+  color: white;
+  background-color: #c8a2c8;
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+  background: linear-gradient(to right, #3090ad, #0f26ac);
+}
+
+.message.received::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  transform: translateY(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent #3090ad transparent transparent;
+}
+
+input[type="text"], input[type="file"], button {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

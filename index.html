@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Chat Corporativo</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+
+</head>
+
+<body>
+
+    <div id="welcome">
+        <h1>Bienvenido al Chat</h1>
+        <label for="username">Nombre de Usuario:</label>
+        <input type="text" id="username" placeholder="Ingresa tu nombre">
+        
+        <div>
+            <input type="radio" id="mainUser" name="userType" value="main">
+            <label for="mainUser">Usuario Principal</label>
+            <input type="radio" id="guestUser" name="userType" value="guest">
+            <label for="guestUser">Invitado</label>
+        </div>
+    
+        <div id="invitationCodeInput" style="display:none;">
+            <label for="accessCode">Código de Invitación:</label>
+            <input type="text" id="accessCode" placeholder="Ingresa el código">
+        </div>
+    
+        <button id="joinChat">Unirse al Chat</button>
+    </div>
+    
+    <div id="chat" style="display: none;">
+        <h2>Chat Público</h2>
+        <div id="invitationCodeContainer">
+            <strong>Código de Invitación:</strong> <span id="invitationCode" style="font-weight: bold;"></span>
+            <button id="copyCode">Copiar Código</button>
+        </div>
+    
+        <div id="messages" class="messages">
+            <!-- Los mensajes se añadirán aquí dinámicamente -->
+        </div>
+        
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje...">
+        <button id="sendMessageButton">Enviar</button>
+        <button onclick="document.getElementById('imageInput').click();">Subir Imagen</button>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+    </div>
+    <div id="privateChatContainer"></div>
+    
+   
+
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
