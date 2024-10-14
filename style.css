@@ -21,6 +21,40 @@ body {
   max-width: 400px;
 }
 
+.welcome{
+  border-radius: 20px;
+}
+
+.welcome:before,
+.welcome:after {
+  content: "";
+    position: absolute;
+    top: 0; /* Cambiado para que cubra completamente */
+    left: 0; /* Cambiado para que cubra completamente */
+    background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000);
+    background-size: 400% 400%;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    z-index: -1; /* Debajo del contenido */
+    animation: animate 10s ease alternate infinite;
+  }
+
+  .welcome h1{
+    color:white;
+    font-size:60px;
+  }
+  
+  .welcome:after{
+    filter: blur(20px); /* Añade un desenfoque al borde */
+    z-index: -2;
+  }
+
+
+
+
+
+
 #chat {
   max-width: 600px;
   margin: 20px auto;
