@@ -38,6 +38,11 @@
     border-radius: 10px;
     margin-top: 50px;
   }
+
+  .Icons{
+    display:flex;
+    flex-direction: row;
+  }
   /* 
   ----------------------
         Overlay
