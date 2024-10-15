@@ -18,22 +18,17 @@ const messagesRef = db.collection('mensajes');
 
 let userId = null;
 let userName = null;
-let currentUser = null;
 let invitationCode;
-let validCodes = {}; // Almacena códigos de invitación válidos
-const users = []; // Almacena los usuarios conectados
 
-
-
-
+// Función para generar y mostrar el código de invitación
 function generateAndShowInvitationCode() {
-    invitationCode = generateInvitationCode(); // Almacena el código generado
+    invitationCode = generateInvitationCode();
     document.getElementById('invitationCode').textContent = invitationCode;
 }
 
 // Función para generar un código de invitación aleatorio
 function generateInvitationCode() {
-    return Math.random().toString(36).substr(2, 8); // Genera un código aleatorio
+    return Math.random().toString(36).substr(2, 8);
 }
 
 // Evento para unirse al chat
@@ -43,10 +38,10 @@ document.getElementById('joinChat').addEventListener('click', () => {
 
     if (userName) {
         if (userType === 'guest') {
-            // Mostrar la ventana modal para ingresar el código de invitación
-            document.getElementById('invitationModal').style.display = 'block';
+            document.getElementById('accessCodeLabel').style.display = 'block';
+            document.getElementById('accessCode').style.display = 'block';
         } else {
-            handleMainUserJoin(); // Llama a la función que maneja la unión del usuario principal
+            handleMainUserJoin();
         }
     } else {
         alert('Por favor, ingresa un nombre.');
@@ -59,130 +54,20 @@ function handleMainUserJoin() {
         name: userName,
         joinedAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then((docRef) => {
-        userId = docRef.id; // Guardar el ID del usuario
-        document.getElementById('welcome').style.display = 'none'; // Ocultar la sección de bienvenida
-        document.getElementById('chat').style.display = 'block'; // Mostrar el chat
-        loadMessages(); // Cargar los mensajes al unirse al chat
-        generateAndShowInvitationCode(); // Generar y mostrar el código de invitación
-
-        // Agregar el usuario a la lista de usuarios conectados
-        if (!users.includes(userName)) {
-            users.push(userName);
-        }
-        updateUserList(); // Asegúrate de tener esta función definida
+        userId = docRef.id;
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('chat').style.display = 'block';
+        loadMessages();
+        generateAndShowInvitationCode();
     }).catch((error) => {
         console.error("Error al guardar el usuario: ", error);
     });
 }
 
-// Evento para confirmar el código de invitación
-document.getElementById('confirmCode').addEventListener('click', () => {
-    const accessCode = document.getElementById('accessCode').value.trim();
-
-    // Aquí se asegura que el código ingresado sea igual al generado
-    if (accessCode === invitationCode) { 
-        // Si el código es válido, unirse al chat como invitado
-        handleGuestUserJoin();
-    } else {
-        alert('Código de invitación inválido. Inténtalo de nuevo.');
-    }
-});
-window.onload = generateAndShowInvitationCode;
-
-// Evento para confirmar el código de invitación
-document.getElementById('confirmCode').addEventListener('click', () => {
-    const accessCode = document.getElementById('accessCode').value.trim();
-
-    // Aquí se asegura que el código ingresado sea igual al generado
-    if (accessCode === invitationCode) { 
-        // Si el código es válido, unirse al chat como invitado
-        handleGuestUserJoin();
-    } else {
-        alert('Código de invitación inválido. Inténtalo de nuevo.');
-    }
-});
-
-// Manejar unión del usuario invitado
-function handleGuestUserJoin() {
-    usersRef.add({
-        name: userName,
-        joinedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).then((docRef) => {
-        userId = docRef.id; // Guardar el ID del usuario
-        document.getElementById('invitationModal').style.display = 'none'; // Cerrar el modal
-        document.getElementById('welcome').style.display = 'none'; // Ocultar sección de bienvenida
-        document.getElementById('chat').style.display = 'block'; // Mostrar chat
-        loadMessages(); // Cargar los mensajes al unirse al chat
-        generateAndShowInvitationCode(); // Generar y mostrar el código de invitación
-    }).catch((error) => {
-        console.error("Error al guardar el usuario: ", error);
-    });
-}
-
-
-// Evento para entrar en el chat privado
-
-
-
-// Eventos para enviar mensajes y subir imágenes
+// Manejar envío de mensajes
 document.getElementById('sendMessageButton').addEventListener('click', sendMessage);
 document.getElementById('imageInput').addEventListener('change', handleImageUpload);
 
-// Evento para entrar en el chat privado
-document.getElementById('enterPrivateChatButton').addEventListener('click', () => {
-    document.getElementById('privateChatModal').style.display = 'block'; // Mostrar el modal para ingresar el código
-});
-
-// Evento para confirmar el código de invitación del chat privado
-document.getElementById('confirmPrivateCode').addEventListener('click', () => {
-    const privateAccessCode = document.getElementById('privateAccessCode').value.trim();
-    
-    // Verifica si el código ingresado es igual al generado
-    if (privateAccessCode === invitationCode) { 
-        alert('¡Bienvenido al Chat Privado!'); // Mensaje de bienvenida
-        // Aquí puedes implementar la lógica para redirigir al chat privado o cargar mensajes
-        document.getElementById('privateChatModal').style.display = 'none'; // Cerrar el modal
-    } else {
-        alert('Código de invitación inválido. Inténtalo de nuevo.'); // Mensaje de error
-    }
-});
-
-// Evento para cancelar el ingreso del código en el modal
-document.getElementById('cancelPrivateCode').addEventListener('click', () => {
-    document.getElementById('privateChatModal').style.display = 'none'; // Cerrar el modal
-});
-
-
-
-// Función para cargar los mensajes en tiempo real
-function loadMessages() {
-    messagesRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
-        const messagesContainer = document.getElementById('messages');
-        messagesContainer.innerHTML = ''; // Limpiar el contenedor de mensajes antes de cargar nuevos
-        snapshot.forEach((doc) => {
-            const messageData = doc.data();
-            const messageElement = document.createElement('div');
-            const isCurrentUser = messageData.userId === userId;
-
-            // Aplicar la clase correcta según si el mensaje es del usuario actual o de otro
-            messageElement.classList.add('message', isCurrentUser ? 'sent' : 'received');
-
-            // Determinar si el mensaje contiene una imagen o texto
-            if (messageData.imageUrl) {
-                // Mostrar la imagen si existe imageUrl en el mensaje
-                messageElement.innerHTML = `<strong>${messageData.sender}:</strong><br><img src="${messageData.imageUrl}" style="max-width: 150px; height: auto; border-radius: 10px;">`;
-            } else {
-                // Mostrar texto si es un mensaje normal
-                messageElement.textContent = `${messageData.sender}: ${messageData.message}`;
-            }
-
-            messagesContainer.appendChild(messageElement);
-        });
-        messagesContainer.scrollTop = messagesContainer.scrollHeight; // Desplazar hacia abajo para ver el último mensaje
-    });
-}
-
-// Función para enviar un mensaje de texto
 function sendMessage() {
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
@@ -194,34 +79,28 @@ function sendMessage() {
             userId: userId,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
-            input.value = ''; // Limpiar el campo de texto después de enviar
+            input.value = '';
         }).catch((error) => {
             console.error("Error al enviar el mensaje: ", error);
         });
     }
 }
 
-// Función para manejar la subida de imágenes
 function handleImageUpload(event) {
     const file = event.target.files[0];
     if (file && userId) {
-        const storageRef = storage.ref(); // Obtener referencia al storage
-        const folderRef = storageRef.child(`misImagenes/${Date.now()}-${file.name}`); // Crear referencia a la carpeta 'misImagenes'
+        const storageRef = storage.ref();
+        const folderRef = storageRef.child(`misImagenes/${Date.now()}-${file.name}`);
 
-        // Subir el archivo a Firebase Storage
         const uploadTask = folderRef.put(file);
 
         uploadTask.on('state_changed', (snapshot) => {
-            // Puedes añadir aquí lógica para mostrar el progreso de la subida si lo deseas
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             console.log('Progreso de la subida: ' + progress + '%');
         }, (error) => {
-            // Manejar errores de subida
             console.error("Error al subir la imagen: ", error);
         }, () => {
-            // Cuando la subida es exitosa, obtener la URL de la imagen
             folderRef.getDownloadURL().then((url) => {
-                // Guardar la URL de la imagen en la colección de mensajes
                 messagesRef.add({
                     imageUrl: url,
                     sender: userName,
@@ -233,4 +112,28 @@ function handleImageUpload(event) {
             });
         });
     }
+}
+
+// Función para cargar los mensajes en tiempo real
+function loadMessages() {
+    messagesRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
+        const messagesContainer = document.getElementById('messages');
+        messagesContainer.innerHTML = '';
+        snapshot.forEach((doc) => {
+            const messageData = doc.data();
+            const messageElement = document.createElement('div');
+            const isCurrentUser = messageData.userId === userId;
+
+            messageElement.classList.add('message', isCurrentUser ? 'sent' : 'received');
+
+            if (messageData.imageUrl) {
+                messageElement.innerHTML = `<strong>${messageData.sender}:</strong><br><img src="${messageData.imageUrl}" style="max-width: 150px; height: auto; border-radius: 10px;">`;
+            } else {
+                messageElement.textContent = `${messageData.sender}: ${messageData.message}`;
+            }
+
+            messagesContainer.appendChild(messageElement);
+        });
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
 }

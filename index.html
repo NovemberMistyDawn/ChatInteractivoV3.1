@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
-    <title>Chat Corporativo</title>
+    <title>Chat Interactivo</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-qrcode/1.0/jquery.qrcode.min.js"></script>
@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body></body>
     <div id="welcome" class="welcome">
         <h1>Bienvenido al Chat</h1>
         <label for="username">Nombre de Usuario:</label>
@@ -27,15 +27,11 @@
             <label for="guestUser">Invitado</label>
         </div>
 
-        <!-- Mostrar el código de invitación aquí -->
-        
-
         <label for="accessCode" id="accessCodeLabel" style="display:none;">Código de Invitación:</label>
         <input type="text" id="accessCode" placeholder="Ingresa el código" style="display:none;">
 
         <button id="joinChat">Unirse al Chat</button>
     </div>
-
 
     <div id="chat" style="display: none;">
         <h2>Chat Público</h2>
@@ -44,7 +40,7 @@
             <button id="copyCode">Copiar Código</button>
         </div>
 
-        <button id="enterPrivateChatButton">Entrar en el Chat Privado</button> <!-- Botón para entrar en el chat privado -->
+        <button id="enterPrivateChatButton">Entrar en el Chat Privado</button>
 
         <div id="messages" class="messages">
             <!-- Los mensajes se añadirán aquí dinámicamente -->
@@ -55,8 +51,6 @@
         <input type="file" id="imageInput" accept="image/*" style="display: none;">
     </div>
 
-
-
     <div id="privateChatModal" class="privateChatAccess" style="display:none;">
         <h2>Ingresar Código de Invitación para el Chat Privado</h2>
         <label for="privateAccessCode">Código de Invitación:</label>
@@ -64,7 +58,7 @@
         <button id="confirmPrivateCode">Confirmar Código</button>
         <button id="cancelPrivateCode">Cancelar</button>
     </div>
-
+    
 
 <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
