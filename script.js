@@ -114,6 +114,13 @@ function handleImageUpload(event) {
     }
 }
 
+document.getElementById('messageInput').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Evita el salto de línea en el input
+        sendMessage(); // Llama a la función que envía el mensaje
+    }
+});
+
 // Función para cargar los mensajes en tiempo real
 function loadMessages() {
     messagesRef.orderBy('timestamp', 'asc').onSnapshot((snapshot) => {
